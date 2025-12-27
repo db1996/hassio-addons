@@ -39,6 +39,9 @@ RUN \
 # Copy root filesystem
 COPY rootfs /
 
+# Reset any entrypoint from couchdb image
+ENTRYPOINT []
+
 # Set proper permissions for service scripts and fix line endings
 RUN \
     dos2unix /etc/services.d/couchdb/run /etc/services.d/couchdb/finish || true \
