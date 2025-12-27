@@ -25,10 +25,10 @@ bashio::log.info "Port: ${port}"
 bashio::log.info "Username: ${username}"
 
 # Create CouchDB configuration
-mkdir -p /opt/couchdb/etc/local.d
+mkdir -p /etc/couchdb/local.d
 
 # Configure CouchDB port and bind address
-cat > /opt/couchdb/etc/local.d/99-addon.ini << EOF
+cat > /etc/couchdb/local.d/99-addon.ini << EOF
 [chttpd]
 port = ${port}
 bind_address = 0.0.0.0
@@ -38,32 +38,28 @@ ${username} = ${password}
 
 [couchdb]
 single_node=true
+database_dir = /config/couchdb/data
+view_index_dir = /config/couchdb/data
 
 [httpd]
 bind_address = 0.0.0.0
 
 [couch_peruser]
 enable = true
-EOF
 
-# Set proper ownership
-chown -R couchdb:couchdb /opt/couchdb/data /opt/couchdb/etc/local.d /opt/couchdb/var/log
+[log]
+file = /config/couchdb/log/couchdb.log
+EOF
 
 # Create data directories in /config for persistence
 mkdir -p /config/couchdb/{data,config,log}
 chown -R couchdb:couchdb /config/couchdb
 
-# Link data to persistent storage
-if [ ! -L /opt/couchdb/data ]; then
-    rm -rf /opt/couchdb/data
-    ln -sf /config/couchdb/data /opt/couchdb/data
-fi
-
-if [ ! -L /opt/couchdb/var/log ]; then
-    rm -rf /opt/couchdb/var/log
-    ln -sf /config/couchdb/log /opt/couchdb/var/log
-fi
+# Set proper ownership for configuration
+chown -R couchdb:couchdb /etc/couchdb
 
 # Start CouchDB
 bashio::log.info "Starting CouchDB database server..."
-exec su-exec couchdb couchdb
+export COUCHDB_USER="${username}"
+export COUCHDB_PASSWORD="${password}"
+exec su-exec couchdb /usr/bin/couchdb

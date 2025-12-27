@@ -7,27 +7,18 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Install requirements for add-on
 RUN \
-    apt-get update \
-    && apt-get install -y --no-install-recommends \
+    apk add --no-cache \
+    bash \
     curl \
-    gnupg \
-    ca-certificates \
-    && curl -L https://couchdb.apache.org/repo/keys.asc | gpg --dearmor | tee /usr/share/keyrings/couchdb-archive-keyring.gpg >/dev/null 2>&1 \
-    && echo "deb [signed-by=/usr/share/keyrings/couchdb-archive-keyring.gpg] https://apache.jfrog.io/artifactory/couchdb-deb/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/couchdb.list >/dev/null \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends couchdb \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
+    su-exec \
     && mkdir -p /opt/couchdb/data /opt/couchdb/etc/local.d /opt/couchdb/var/log
 
-# Copy root filesystem
-COPY rootfs /
-
-# Build arguments
-ARG BUILD_ARCH
-ARG BUILD_DATE
-ARG BUILD_DESCRIPTION
-ARG BUILD_NAME
+# Install CouchDB from official Alpine packages
+RUN \
+    apk add --no-cache couchdb \
+    && addgroup -g 5984 couchdb \
+    && adduser -u 5984 -G couchdb -s /bin/bash -D couchdb \
+    && chown -R couchdb:couchdb /opt/couchdb
 ARG BUILD_REF
 ARG BUILD_REPOSITORY
 ARG BUILD_VERSION
