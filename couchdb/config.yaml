@@ -8,7 +8,6 @@ arch:
   - aarch64
   - amd64
   - armv7
-init: false
 ports:
   5984/tcp: 5984
 ports_description:
