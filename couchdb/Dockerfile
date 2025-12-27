@@ -20,32 +20,9 @@ RUN \
     su-exec \
     tini \
     erlang \
-    erlang-crypto \
-    erlang-syntax-tools \
-    erlang-parsetools \
-    erlang-eunit \
-    erlang-erts \
-    erlang-kernel \
-    erlang-stdlib \
-    erlang-asn1 \
-    erlang-sasl \
-    erlang-ssl \
-    erlang-public-key \
-    erlang-mnesia \
-    erlang-runtime-tools \
-    erlang-xmerl \
-    erlang-tools \
-    erlang-inets \
-    openssl \
-    icu-libs \
-    libstdc++ \
-    libgcc
 
-# Copy CouchDB from official image
-COPY --from=couchdb /opt/couchdb /opt/couchdb
-
-# Create CouchDB user and set permissions
-RUN \
+    # Create CouchDB user and set permissions
+    RUN \
     addgroup -g 5984 couchdb \
     && adduser -u 5984 -G couchdb -s /bin/bash -D couchdb \
     && mkdir -p /opt/couchdb/data /opt/couchdb/etc/local.d /opt/couchdb/var/log \
