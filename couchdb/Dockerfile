@@ -12,6 +12,9 @@ FROM $BUILD_FROM
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+# Install glibc compatibility for Debian binaries
+RUN apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing gnu-libc-compat
+
 # Install requirements for add-on
 RUN \
     apk add --no-cache \
@@ -19,7 +22,6 @@ RUN \
     curl \
     su-exec \
     tini \
-    erlang \
     openssl \
     icu-libs \
     libstdc++ \
