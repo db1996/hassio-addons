@@ -24,11 +24,11 @@ bashio::log.info "Starting CouchDB..."
 bashio::log.info "Port: ${port}"
 bashio::log.info "Username: ${username}"
 
-# Create CouchDB configuration directory
-mkdir -p /etc/couchdb/local.d
+# Create CouchDB configuration
+mkdir -p /opt/couchdb/etc/local.d
 
 # Configure CouchDB port and bind address
-cat > /etc/couchdb/local.d/99-addon.ini << EOF
+cat > /opt/couchdb/etc/local.d/99-addon.ini << EOF
 [chttpd]
 port = ${port}
 bind_address = 0.0.0.0
@@ -53,9 +53,12 @@ EOF
 
 # Create data directories in /config for persistence
 mkdir -p /config/couchdb/{data,config,log}
+chown -R couchdb:couchdb /config/couchdb
+chown -R couchdb:couchdb /opt/couchdb/etc
 
 # Start CouchDB
 bashio::log.info "Starting CouchDB database server..."
 export COUCHDB_USER="${username}"
 export COUCHDB_PASSWORD="${password}"
-exec couchdb
+cd /opt/couchdb
+exec s6-setuidgid couchdb /opt/couchdb/bin/couchdb

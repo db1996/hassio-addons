@@ -1,29 +1,44 @@
 # https://developers.home-assistant.io/docs/add-ons/configuration#add-on-dockerfile
 
 ARG BUILD_FROM
+FROM couchdb:3.3 AS couchdb
+
+# Main build
 FROM $BUILD_FROM
 
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# Install CouchDB and dependencies
-RUN \
-    apk add --no-cache \
+# Install runtime dependencies that CouchDB needs
+RUN apk add --no-cache \
     bash \
     curl \
-    couchdb \
-    dos2unix
+    dos2unix \
+    libstdc++ \
+    libgcc \
+    ncurses-libs \
+    openssl
 
-# Create data directories
-RUN \
-    mkdir -p /opt/couchdb/data /opt/couchdb/etc/local.d /opt/couchdb/var/log
+# Copy CouchDB completely from official image
+COPY --from=couchdb /opt/couchdb /opt/couchdb
+
+# Copy necessary system libraries and dependencies from Debian image
+COPY --from=couchdb /lib/x86_64-linux-gnu/*.so* /lib/ 2>/dev/null || true
+COPY --from=couchdb /lib/aarch64-linux-gnu/*.so* /lib/ 2>/dev/null || true
+COPY --from=couchdb /usr/lib/x86_64-linux-gnu/*.so* /usr/lib/ 2>/dev/null || true
+COPY --from=couchdb /usr/lib/aarch64-linux-gnu/*.so* /usr/lib/ 2>/dev/null || true
+
+# Create CouchDB user and set permissions
+RUN addgroup -g 5984 couchdb \
+    && adduser -u 5984 -G couchdb -s /bin/bash -D couchdb \
+    && mkdir -p /opt/couchdb/data /opt/couchdb/etc/local.d /opt/couchdb/var/log \
+    && chown -R couchdb:couchdb /opt/couchdb
 
 # Copy root filesystem
 COPY rootfs /
 
-# Set proper permissions for service scripts and fix line endings
-RUN \
-    dos2unix /etc/services.d/couchdb/run /etc/services.d/couchdb/finish || true \
+# Set proper permissions for service scripts
+RUN dos2unix /etc/services.d/couchdb/run /etc/services.d/couchdb/finish || true \
     && chmod +x /etc/services.d/couchdb/run \
     && chmod +x /etc/services.d/couchdb/finish
 
