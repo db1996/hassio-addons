@@ -1,12 +1,13 @@
 # https://developers.home-assistant.io/docs/add-ons/configuration#add-on-config
 name: CouchDB
-version: "1.0.0.10"
+version: "1.0.0.11"
 slug: couchdb
 description: CouchDB database server for Home Assistant
 url: "https://github.com/db1996/hassio-addons/tree/main/couchdb"
 arch:
   - aarch64
   - amd64
+init: false
 ports:
   5984/tcp: 5984
 ports_description:
