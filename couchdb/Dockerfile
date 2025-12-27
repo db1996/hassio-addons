@@ -20,9 +20,16 @@ RUN \
     su-exec \
     tini \
     erlang \
+    openssl \
+    icu-libs \
+    libstdc++ \
+    libgcc
 
-    # Create CouchDB user and set permissions
-    RUN \
+# Copy CouchDB from official image
+COPY --from=couchdb /opt/couchdb /opt/couchdb
+
+# Create CouchDB user and set permissions
+RUN \
     addgroup -g 5984 couchdb \
     && adduser -u 5984 -G couchdb -s /bin/bash -D couchdb \
     && mkdir -p /opt/couchdb/data /opt/couchdb/etc/local.d /opt/couchdb/var/log \
