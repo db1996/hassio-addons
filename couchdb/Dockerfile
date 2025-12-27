@@ -41,8 +41,7 @@ COPY rootfs /
 # Set proper permissions for service scripts
 RUN \
     chmod +x /etc/services.d/couchdb/run \
-    && chmod +x /etc/services.d/couchdb/finish \
-    && chmod +x /init
+    && chmod +x /etc/services.d/couchdb/finish
 
 # Build arguments
 ARG BUILD_ARCH
