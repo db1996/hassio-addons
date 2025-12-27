@@ -1,10 +1,12 @@
 # https://developers.home-assistant.io/docs/add-ons/configuration#add-on-dockerfile
 
+# Global build argument
+ARG BUILD_FROM
+
 # Get CouchDB from official image
-FROM couchdb:3.3 as couchdb
+FROM couchdb:3.3 AS couchdb
 
 # Main build
-ARG BUILD_FROM
 FROM $BUILD_FROM
 
 # Set shell
