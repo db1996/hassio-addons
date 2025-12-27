@@ -36,8 +36,8 @@ COPY --from=couchdb /opt/couchdb /opt/couchdb
 
 # Copy all necessary libraries from Debian (architecture-specific)
 RUN mkdir -p /lib/x86_64-linux-gnu /lib/aarch64-linux-gnu /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu
-COPY --from=couchdb /lib/*-linux-gnu* /lib/ 2>/dev/null || true
-COPY --from=couchdb /usr/lib/*-linux-gnu* /usr/lib/ 2>/dev/null || true
+COPY --from=couchdb /lib/*-linux-gnu* /lib/ 
+COPY --from=couchdb /usr/lib/*-linux-gnu* /usr/lib/
 
 # Fix glibc loader path - Debian binaries expect it in /lib64
 RUN mkdir -p /lib64 \
