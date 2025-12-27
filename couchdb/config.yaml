@@ -3,7 +3,7 @@ name: CouchDB
 version: "1.0.0"
 slug: couchdb
 description: CouchDB database server for Home Assistant
-url: "https://github.com/your-username/hassio-addons/tree/main/couchdb"
+url: "https://github.com/db1996/hassio-addons/tree/main/couchdb"
 arch:
   - aarch64
   - amd64

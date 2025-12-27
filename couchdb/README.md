@@ -114,11 +114,11 @@ SOFTWARE.
 [aarch64-shield]: https://img.shields.io/badge/aarch64-yes-green.svg
 [amd64-shield]: https://img.shields.io/badge/amd64-yes-green.svg
 [armv7-shield]: https://img.shields.io/badge/armv7-yes-green.svg
-[contributors]: https://github.com/your-username/hassio-addons/graphs/contributors
+[contributors]: https://github.com/db1996/hassio-addons/graphs/contributors
 [discord-ha]: https://discord.gg/c5DvZ4e
 [discord]: https://discord.me/hassioaddons
 [forum]: https://community.home-assistant.io/t/repository-community-hass-io-add-ons/24705?u=frenck
-[your-name]: https://github.com/your-username
-[issue]: https://github.com/your-username/hassio-addons/issues
+[your-name]: https://github.com/db1996
+[issue]: https://github.com/db1996/hassio-addons/issues
 [reddit]: https://reddit.com/r/homeassistant
-[repository]: https://github.com/your-username/hassio-addons
+[repository]: https://github.com/db1996/hassio-addons
