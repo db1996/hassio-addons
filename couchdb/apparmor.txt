@@ -1,0 +1,69 @@
+#include <tunables/global>
+
+profile couchdb_addon flags=(attach_disconnected,mediate_deleted) {
+  #include <abstractions/base>
+  #include <abstractions/bash>
+
+  # Capabilities
+  capability setgid,
+  capability setuid,
+  capability net_bind_service,
+
+  # S6-Overlay
+  /init ix,
+  /bin/** ix,
+  /usr/bin/** ix,
+  /run/{s6,s6-rc*,service}/** ix,
+  /package/** ix,
+  /command/** ix,
+  /etc/services.d/** rwix,
+  /etc/cont-init.d/** rwix,
+  /etc/cont-finish.d/** rwix,
+  /run/{,**} rwk,
+  /dev/tty rw,
+
+  # Bashio
+  /usr/lib/bashio/** ix,
+  /tmp/** rwk,
+
+  # Options.json
+  /data/options.json r,
+
+  # CouchDB specific
+  /opt/couchdb/** rwix,
+  /config/couchdb/** rwk,
+  /usr/bin/couchdb ix,
+  /usr/lib/couchdb/** r,
+  /var/lib/couchdb/** rwk,
+  /var/log/couchdb/** rwk,
+
+  # System
+  /etc/passwd r,
+  /etc/group r,
+  /etc/nsswitch.conf r,
+  /etc/hosts r,
+  /etc/host.conf r,
+  /etc/hostname r,
+  /etc/localtime r,
+  /usr/share/zoneinfo/** r,
+  
+  # Networking
+  network inet stream,
+  network inet dgram,
+  network inet6 stream,
+  network inet6 dgram,
+
+  # Signal
+  signal (send) set=(kill,term,int,quit,alrm,usr1,usr2),
+  signal (receive) set=(kill,term,int,quit,alrm,usr1,usr2),
+
+  # Proc filesystem
+  /proc/cpuinfo r,
+  /proc/meminfo r,
+  owner /proc/*/stat r,
+  /proc/sys/net/core/somaxconn r,
+
+  # Deny some stuff
+  deny @{HOME}/.* mrwkl,
+  deny /root/.* mrwkl,
+}

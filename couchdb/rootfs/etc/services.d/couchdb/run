@@ -1,0 +1,69 @@
+#!/usr/bin/with-contenv bashio
+# ==============================================================================
+# Start the CouchDB service
+# s6-overlay docs: https://github.com/just-containers/s6-overlay
+# ==============================================================================
+
+# Declare variables
+declare port
+declare username
+declare password
+
+# Get configuration
+port=$(bashio::config 'port')
+username=$(bashio::config 'username')
+password=$(bashio::config 'password')
+
+# Validate password is provided
+if bashio::var.is_empty "${password}"; then
+    bashio::log.fatal "Password is required for CouchDB!"
+    bashio::exit.nok
+fi
+
+bashio::log.info "Starting CouchDB..."
+bashio::log.info "Port: ${port}"
+bashio::log.info "Username: ${username}"
+
+# Create CouchDB configuration
+mkdir -p /opt/couchdb/etc/local.d
+
+# Configure CouchDB port and bind address
+cat > /opt/couchdb/etc/local.d/99-addon.ini << EOF
+[chttpd]
+port = ${port}
+bind_address = 0.0.0.0
+
+[admins]
+${username} = ${password}
+
+[couchdb]
+single_node=true
+
+[httpd]
+bind_address = 0.0.0.0
+
+[couch_peruser]
+enable = true
+EOF
+
+# Set proper ownership
+chown -R couchdb:couchdb /opt/couchdb/data /opt/couchdb/etc/local.d /opt/couchdb/var/log
+
+# Create data directories in /config for persistence
+mkdir -p /config/couchdb/{data,config,log}
+chown -R couchdb:couchdb /config/couchdb
+
+# Link data to persistent storage
+if [ ! -L /opt/couchdb/data ]; then
+    rm -rf /opt/couchdb/data
+    ln -sf /config/couchdb/data /opt/couchdb/data
+fi
+
+if [ ! -L /opt/couchdb/var/log ]; then
+    rm -rf /opt/couchdb/var/log
+    ln -sf /config/couchdb/log /opt/couchdb/var/log
+fi
+
+# Start CouchDB
+bashio::log.info "Starting CouchDB database server..."
+exec su-exec couchdb couchdb

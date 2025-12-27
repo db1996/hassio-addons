@@ -1,0 +1,53 @@
+# https://developers.home-assistant.io/docs/add-ons/configuration#add-on-dockerfile
+ARG BUILD_FROM
+FROM $BUILD_FROM
+
+# Set shell
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# Install requirements for add-on
+RUN \
+    apt-get update \
+    && apt-get install -y --no-install-recommends \
+    curl \
+    gnupg \
+    ca-certificates \
+    && curl -L https://couchdb.apache.org/repo/keys.asc | gpg --dearmor | tee /usr/share/keyrings/couchdb-archive-keyring.gpg >/dev/null 2>&1 \
+    && echo "deb [signed-by=/usr/share/keyrings/couchdb-archive-keyring.gpg] https://apache.jfrog.io/artifactory/couchdb-deb/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/couchdb.list >/dev/null \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends couchdb \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /opt/couchdb/data /opt/couchdb/etc/local.d /opt/couchdb/var/log
+
+# Copy root filesystem
+COPY rootfs /
+
+# Build arguments
+ARG BUILD_ARCH
+ARG BUILD_DATE
+ARG BUILD_DESCRIPTION
+ARG BUILD_NAME
+ARG BUILD_REF
+ARG BUILD_REPOSITORY
+ARG BUILD_VERSION
+
+# Labels
+LABEL \
+    io.hass.name="${BUILD_NAME}" \
+    io.hass.description="${BUILD_DESCRIPTION}" \
+    io.hass.arch="${BUILD_ARCH}" \
+    io.hass.type="addon" \
+    io.hass.version=${BUILD_VERSION} \
+    maintainer="Your Name <your.email@example.com>" \
+    org.opencontainers.image.title="${BUILD_NAME}" \
+    org.opencontainers.image.description="${BUILD_DESCRIPTION}" \
+    org.opencontainers.image.vendor="Home Assistant Add-ons" \
+    org.opencontainers.image.authors="Your Name <your.email@example.com>" \
+    org.opencontainers.image.licenses="Apache License 2.0" \
+    org.opencontainers.image.url="https://github.com/${BUILD_REPOSITORY}" \
+    org.opencontainers.image.source="https://github.com/${BUILD_REPOSITORY}" \
+    org.opencontainers.image.documentation="https://github.com/${BUILD_REPOSITORY}/blob/main/README.md" \
+    org.opencontainers.image.created=${BUILD_DATE} \
+    org.opencontainers.image.revision=${BUILD_REF} \
+    org.opencontainers.image.version=${BUILD_VERSION}

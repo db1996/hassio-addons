@@ -1,0 +1,12 @@
+# Translations for CouchDB add-on
+
+configuration:
+  port:
+    name: Port
+    description: The port number CouchDB will listen on
+  username:
+    name: Username
+    description: Admin username for CouchDB
+  password:
+    name: Password
+    description: Admin password for CouchDB (required)

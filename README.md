@@ -1,40 +1,73 @@
-# Example Home Assistant add-on repository
+# Home Assistant Add-ons Repository
 
-This repository can be used as a "blueprint" for add-on development to help you get started.
-
-Add-on documentation: <https://developers.home-assistant.io/docs/add-ons>
+Home Assistant add-ons for enhanced functionality and database services.
 
 [![Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https://github.com/db1996/hassio-addons)
 
+## Installation
+
+1. Click the button above or navigate to the "Add-on Store" in your Home Assistant Supervisor
+2. Click on the three-dot menu (⋮) in the top right corner
+3. Select "Repositories"
+4. Add this repository URL: `https://github.com/db1996/hassio-addons`
+5. Find the add-on you want to install and click "Install"
+
 ## Add-ons
 
-This repository contains the following add-ons
+This repository contains the following add-ons:
 
-### [Example add-on](./example)
+### [CouchDB](./couchdb)
 
 ![Supports aarch64 Architecture][aarch64-shield]
 ![Supports amd64 Architecture][amd64-shield]
+![Supports armv7 Architecture][armv7-shield]
 
-_Example add-on to use as a blueprint for new add-ons._
+_CouchDB is a database that uses JSON for documents, JavaScript for MapReduce indexes, and regular HTTP for its API._
 
-<!--
+**Features:**
+- Full CouchDB database server
+- Web-based administration interface (Fauxton)
+- RESTful HTTP API
+- Persistent data storage
+- Configurable authentication
+- Multi-architecture support
 
-Notes to developers after forking or using the github template feature:
-- While developing comment out the 'image' key from 'example/config.yaml' to make the supervisor build the addon
-  - Remember to put this back when pushing up your changes.
-- When you merge to the 'main' branch of your repository a new build will be triggered.
-  - Make sure you adjust the 'version' key in 'example/config.yaml' when you do that.
-  - Make sure you update 'example/CHANGELOG.md' when you do that.
-  - The first time this runs you might need to adjust the image configuration on github container registry to make it public
-  - You may also need to adjust the github Actions configuration (Settings > Actions > General > Workflow > Read & Write)
-- Adjust the 'image' key in 'example/config.yaml' so it points to your username instead of 'home-assistant'.
-  - This is where the build images will be published to.
-- Rename the example directory.
-  - The 'slug' key in 'example/config.yaml' should match the directory name.
-- Adjust all keys/url's that points to 'home-assistant' to now point to your user/fork.
-- Share your repository on the forums https://community.home-assistant.io/c/projects/9
-- Do awesome stuff!
- -->
+## Support
+
+Got questions?
+
+You have several options to get them answered:
+
+- The [Home Assistant Community Add-ons Discord chat server][discord] for add-on support and feature requests
+- The [Home Assistant Discord chat server][discord-ha] for general Home Assistant discussions and questions
+- The Home Assistant [Community Forum][forum]
+- Join the [Reddit subreddit][reddit] in [/r/homeassistant][reddit]
+
+You could also [open an issue here][issue] on GitHub.
+
+## Contributing
+
+This is an active open-source project. We are always open to people who want to use the code or contribute to it.
+
+Thank you for being involved! :heart_eyes:
+
+## License
+
+MIT License
+
+Copyright (c) 2025
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 [aarch64-shield]: https://img.shields.io/badge/aarch64-yes-green.svg
 [amd64-shield]: https://img.shields.io/badge/amd64-yes-green.svg
+[armv7-shield]: https://img.shields.io/badge/armv7-yes-green.svg
+[discord-ha]: https://discord.gg/c5DvZ4e
+[discord]: https://discord.me/hassioaddons
+[forum]: https://community.home-assistant.io/
+[issue]: https://github.com/db1996/hassio-addons/issues
+[reddit]: https://reddit.com/r/homeassistant
