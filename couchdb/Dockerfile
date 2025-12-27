@@ -34,10 +34,18 @@ RUN \
 # Copy CouchDB from official image
 COPY --from=couchdb /opt/couchdb /opt/couchdb
 
+# Copy all necessary libraries from Debian
+COPY --from=couchdb /lib/x86_64-linux-gnu /lib/x86_64-linux-gnu
+COPY --from=couchdb /lib/aarch64-linux-gnu /lib/aarch64-linux-gnu
+COPY --from=couchdb /usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu
+COPY --from=couchdb /usr/lib/aarch64-linux-gnu /usr/lib/aarch64-linux-gnu
+
 # Fix glibc loader path - Debian binaries expect it in /lib64
 RUN mkdir -p /lib64 \
     && ln -sf /usr/glibc-compat/lib/ld-linux-aarch64.so.1 /lib64/ld-linux-aarch64.so.1 2>/dev/null || true \
-    && ln -sf /usr/glibc-compat/lib/ld-linux-x86-64.so.2 /lib64/ld-linux-x86-64.so.2 2>/dev/null || true
+    && ln -sf /usr/glibc-compat/lib/ld-linux-x86-64.so.2 /lib64/ld-linux-x86-64.so.2 2>/dev/null || true \
+    && ln -sf /lib/aarch64-linux-gnu/ld-linux-aarch64.so.1 /lib64/ld-linux-aarch64.so.1 2>/dev/null || true \
+    && ln -sf /lib/x86_64-linux-gnu/ld-linux-x86-64.so.2 /lib64/ld-linux-x86-64.so.2 2>/dev/null || true
 
 # Create CouchDB user and set permissions
 RUN \
