@@ -54,11 +54,12 @@ EOF
 # Create data directories in /config for persistence
 mkdir -p /config/couchdb/{data,config,log}
 chown -R couchdb:couchdb /config/couchdb
+
+# Set proper ownership for configuration
 chown -R couchdb:couchdb /opt/couchdb/etc
 
 # Start CouchDB
 bashio::log.info "Starting CouchDB database server..."
 export COUCHDB_USER="${username}"
 export COUCHDB_PASSWORD="${password}"
-cd /opt/couchdb
-exec s6-setuidgid couchdb /opt/couchdb/bin/couchdb
+exec su-exec couchdb /opt/couchdb/bin/couchdb
