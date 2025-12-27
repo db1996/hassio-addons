@@ -23,7 +23,8 @@ RUN \
     openssl \
     icu-libs \
     libstdc++ \
-    libgcc
+    libgcc \
+    dos2unix
 
 # Copy CouchDB from official image
 COPY --from=couchdb /opt/couchdb /opt/couchdb
@@ -38,9 +39,10 @@ RUN \
 # Copy root filesystem
 COPY rootfs /
 
-# Set proper permissions for service scripts
+# Set proper permissions for service scripts and fix line endings
 RUN \
-    chmod +x /etc/services.d/couchdb/run \
+    dos2unix /etc/services.d/couchdb/run /etc/services.d/couchdb/finish || true \
+    && chmod +x /etc/services.d/couchdb/run \
     && chmod +x /etc/services.d/couchdb/finish
 
 # Build arguments
