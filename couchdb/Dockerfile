@@ -1,40 +1,22 @@
 # https://developers.home-assistant.io/docs/add-ons/configuration#add-on-dockerfile
 
-# Global build argument
 ARG BUILD_FROM
-
-# Get CouchDB from official image
-FROM couchdb:3.3 AS couchdb
-
-# Main build
 FROM $BUILD_FROM
 
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# Install requirements for add-on
+# Install CouchDB and dependencies
 RUN \
     apk add --no-cache \
     bash \
     curl \
-    su-exec \
-    tini \
-    erlang \
-    openssl \
-    icu-libs \
-    libstdc++ \
-    libgcc \
+    couchdb \
     dos2unix
 
-# Copy CouchDB from official image
-COPY --from=couchdb /opt/couchdb /opt/couchdb
-
-# Create CouchDB user and set permissions
+# Create data directories
 RUN \
-    addgroup -g 5984 couchdb \
-    && adduser -u 5984 -G couchdb -s /bin/bash -D couchdb \
-    && mkdir -p /opt/couchdb/data /opt/couchdb/etc/local.d /opt/couchdb/var/log \
-    && chown -R couchdb:couchdb /opt/couchdb
+    mkdir -p /opt/couchdb/data /opt/couchdb/etc/local.d /opt/couchdb/var/log
 
 # Copy root filesystem
 COPY rootfs /
