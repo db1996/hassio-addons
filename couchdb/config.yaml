@@ -24,4 +24,4 @@ schema:
   port: "int(1,65535)"
   username: "str"
   password: "password"
-image: "ghcr.io/home-assistant/{arch}-addon-couchdb"
+# image: "ghcr.io/home-assistant/{arch}-addon-couchdb"
