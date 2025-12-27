@@ -34,6 +34,11 @@ RUN \
 # Copy CouchDB from official image
 COPY --from=couchdb /opt/couchdb /opt/couchdb
 
+# Fix glibc loader path - Debian binaries expect it in /lib64
+RUN mkdir -p /lib64 \
+    && ln -sf /usr/glibc-compat/lib/ld-linux-aarch64.so.1 /lib64/ld-linux-aarch64.so.1 2>/dev/null || true \
+    && ln -sf /usr/glibc-compat/lib/ld-linux-x86-64.so.2 /lib64/ld-linux-x86-64.so.2 2>/dev/null || true
+
 # Create CouchDB user and set permissions
 RUN \
     addgroup -g 5984 couchdb \
