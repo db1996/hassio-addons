@@ -39,9 +39,6 @@ RUN \
 # Copy root filesystem
 COPY rootfs /
 
-# Reset any entrypoint from couchdb image
-ENTRYPOINT []
-
 # Set proper permissions for service scripts and fix line endings
 RUN \
     dos2unix /etc/services.d/couchdb/run /etc/services.d/couchdb/finish || true \
@@ -76,6 +73,3 @@ LABEL \
     org.opencontainers.image.created=${BUILD_DATE} \
     org.opencontainers.image.revision=${BUILD_REF} \
     org.opencontainers.image.version=${BUILD_VERSION}
-
-# Start s6-overlay
-CMD ["/init"]
